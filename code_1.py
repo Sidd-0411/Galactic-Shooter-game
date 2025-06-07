@@ -7,7 +7,7 @@ pygame.init()
 
 WIDTH, HEIGHT = 600, 700
 win = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("UFO vs Asteroids")
+pygame.display.set_caption("Galactic Shooter")
 
 # Load images
 bg_img = pygame.image.load("assets/space_bg.jpg")
