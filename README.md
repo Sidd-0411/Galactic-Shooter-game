@@ -1,4 +1,4 @@
-# 🚀 Galactic-Run-game
+# 🚀 Galactic-Shooter-game
 
 A fun and challenging 2D arcade-style space shooter game built using **Python** and **Pygame**. Navigate your UFO through deadly asteroid fields and survive meteor showers.
 
