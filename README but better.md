@@ -29,6 +29,6 @@ You're piloting a prototype Spaceship through dense asteroid fields. Your missio
 1. Install Python 3
 2. Install ship control systems:
    ```bash
-   pip install pygame```
+   pip install pygam
 3. Copy-paste the code_1 and assets files in a folder.
 4. Run that in VS code.
