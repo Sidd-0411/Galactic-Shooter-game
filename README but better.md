@@ -16,9 +16,8 @@ You're piloting a prototype Spaceship through dense asteroid fields. Your missio
 
 > _"You’ve got a good ship. Don’t waste it by pressing the wrong buttons."_
 
-- **Arrow Keys / WASD** – Steer your ship
+- **left arrow/right arrow** – Steer your ship
 - **Spacebar** – Fire lasers
-- **Avoid** – Everything that isn’t glowing or helpful
 - **Spacebar (hold)** - Fire multiple lasers
 
 ---
