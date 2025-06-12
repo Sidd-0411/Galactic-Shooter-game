@@ -93,7 +93,7 @@ def draw_text_center(text, font, color, y):
 def main_menu():
     global current_difficulty_index
     selected = 0
-    menu_options = ["New Game", "Difficulty", "Instructions", "Exit"]
+    menu_options = ["New Game", "Difficulty", "Exit"]  # Instructions removed from main menu
     running = True
 
     while running:
@@ -129,12 +129,10 @@ def main_menu():
                 elif event.key in [pygame.K_RETURN, pygame.K_KP_ENTER]:
                     choice = menu_options[selected]
                     if choice == "New Game":
-                        instructions_menu()
-                        running = False  # Proceed to game after instructions
+                        instructions_menu()  # Show instructions before starting game
+                        running = False
                     elif choice == "Difficulty":
                         current_difficulty_index = (current_difficulty_index + 1) % len(difficulty_names)
-                    elif choice == "Instructions":
-                        instructions_menu()
                     elif choice == "Exit":
                         pygame.quit()
                         sys.exit()
