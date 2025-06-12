@@ -64,30 +64,56 @@ class ConeLaser:
         ox, oy = offset
         surface.blit(self.image, (self.rect.x + ox, self.rect.y + oy))
 
+
+def word_wrap(text, font, max_width):
+    """Wrap text into multiple lines to fit max_width."""
+    words = text.split(' ')
+    lines = []
+    current_line = ''
+    for word in words:
+        test_line = current_line + (' ' if current_line else '') + word
+        width, _ = font.size(test_line)
+        if width <= max_width:
+            current_line = test_line
+        else:
+            if current_line:
+                lines.append(current_line)
+            current_line = word
+    if current_line:
+        lines.append(current_line)
+    return lines
+
+
 def draw_text_center(text, font, color, y):
     rendered = font.render(text, True, color)
     rect = rendered.get_rect(center=(WIDTH // 2, y))
     win.blit(rendered, rect)
 
+
 def main_menu():
     global current_difficulty_index
     selected = 0
-    menu_options = ["New Game", "Difficulty", "Exit"]
+    menu_options = ["New Game", "Difficulty", "Instructions", "Exit"]
     running = True
 
     while running:
         clock.tick(60)
         win.fill((10, 10, 30))
-        draw_text_center(" UFO vs Asteroids ", SEXY_FONT, (255, 255, 0), 150)
+        draw_text_center(" UFO vs Asteroids ", SEXY_FONT, (255, 255, 0), 80)
+
+        start_y = 180
+        line_spacing = 70
 
         for i, option in enumerate(menu_options):
             color = (255, 255, 255)
             if i == selected:
                 color = (255, 150, 0)
-            draw_text_center(option, SEXY_FONT, color, 300 + i * 60)
+            draw_text_center(option, SEXY_FONT, color, start_y + i * line_spacing)
 
+        # Difficulty placed below menu options with additional spacing
         diff_text = f"Difficulty: {difficulty_names[current_difficulty_index]}"
-        draw_text_center(diff_text, SEXY_FONT, (200, 200, 200), 500)
+        diff_y = start_y + len(menu_options) * line_spacing + 40
+        draw_text_center(diff_text, SEXY_FONT, (200, 200, 200), diff_y)
 
         pygame.display.update()
 
@@ -101,13 +127,66 @@ def main_menu():
                 elif event.key == pygame.K_DOWN:
                     selected = (selected + 1) % len(menu_options)
                 elif event.key in [pygame.K_RETURN, pygame.K_KP_ENTER]:
-                    if menu_options[selected] == "New Game":
-                        running = False
-                    elif menu_options[selected] == "Difficulty":
+                    choice = menu_options[selected]
+                    if choice == "New Game":
+                        instructions_menu()
+                        running = False  # Proceed to game after instructions
+                    elif choice == "Difficulty":
                         current_difficulty_index = (current_difficulty_index + 1) % len(difficulty_names)
-                    elif menu_options[selected] == "Exit":
+                    elif choice == "Instructions":
+                        instructions_menu()
+                    elif choice == "Exit":
                         pygame.quit()
                         sys.exit()
+
+
+def instructions_menu():
+    running = True
+    bg_color = (10, 10, 30)
+    title_color = (255, 255, 0)
+    text_color = (180, 180, 180)
+    highlight_color = (0, 255, 255)
+    line_height = 36
+    max_text_width = WIDTH - 80  # Margin of 40px each side
+
+    instructions = [
+        "Press LEFT and RIGHT to steer the ship",
+        "Press SPACE to fire a laser",
+        "Hold SPACE to charge and fire multiple lasers",
+    ]
+
+    while running:
+        clock.tick(60)
+        win.fill(bg_color)
+
+        draw_text_center(" HOW TO PLAY ", SEXY_FONT, title_color, 80)
+
+        # Render wrapped instructions lines spaced nicely
+        current_y = 140
+        for line in instructions:
+            wrapped_lines = word_wrap(line, SEXY_FONT, max_text_width)
+            for wline in wrapped_lines:
+                text_surface = SEXY_FONT.render(wline, True, text_color)
+                rect = text_surface.get_rect(center=(WIDTH // 2, current_y))
+                win.blit(text_surface, rect)
+                current_y += line_height
+
+        # Draw Continue button distinctly
+        continue_text = "Press ENTER to CONTINUE"
+        cont_surface = SEXY_FONT.render(continue_text, True, highlight_color)
+        cont_rect = cont_surface.get_rect(center=(WIDTH // 2, HEIGHT - 80))
+        win.blit(cont_surface, cont_rect)
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+                    running = False
+
 
 def draw_game(ufo, lasers, cone_lasers, asteroids, score, lives, shake_offset=(0, 0), charge_progress=0, meteor_shower_active=False):
     offset_x, offset_y = shake_offset
@@ -149,6 +228,7 @@ def draw_game(ufo, lasers, cone_lasers, asteroids, score, lives, shake_offset=(0
 
     pygame.display.update()
 
+
 def draw_game_over(score):
     win.blit(bg_img, (0, 0))
     game_over_text = SEXY_FONT.render(" GAME OVER ", True, (255, 0, 0))
@@ -162,6 +242,7 @@ def draw_game_over(score):
     win.blit(retry_text, (WIDTH // 2 - 170, HEIGHT // 2 + 60))
 
     pygame.display.update()
+
 
 def main():
     global high_score, ASTEROID_SPEED
@@ -307,3 +388,4 @@ def main():
 if __name__ == "__main__":
     main_menu()
     main()
+
