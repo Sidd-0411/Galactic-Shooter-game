@@ -12,6 +12,12 @@ A fun and challenging 2D arcade-style space shooter game built using **Python** 
 - Meteor shower events to increase challenge
 - Game over and restart feature
 - High score tracking
+  
+
+## Controls
+  - **left arrow/right arrow** – Steer your ship
+- **Spacebar** – Fire lasers
+- **Spacebar (hold)** - Fire multiple lasers
 
 
 # Steps to Install
